@@ -10,6 +10,9 @@ const args = require('minimist')(process.argv.slice(2));
 const semver = require('semver');
 const chalk = require('chalk');
 const prompts = require('prompts');
+const tempfile = require('tempfile')
+const addStream = require('add-stream')
+const conventionalChangelog = require('conventional-changelog');
 
 /**
  * @type {import('semver').ReleaseType[]}
@@ -159,7 +162,8 @@ async function main() {
   }
 
   step('\nGenerating changelog...');
-  await run('yarn', ['changelog']);
+  // await run('yarn', ['changelog']);
+  await changelog();
 
   const { stdout } = await run('git', ['diff'], { stdio: 'pipe' });
   if (stdout) {
@@ -235,6 +239,64 @@ async function ghRelease(tag, prerelease) {
   }
 
   await runIfNotDry('gh', args);
+}
+
+async function changelog() {
+  const infile = 'CHANGELOG.md'
+  const outfile = infile
+  const sameFile = true
+
+  const changelogStream = conventionalChangelog({
+    preset: 'angular',
+    releaseCount: fs.existsSync(infile) ? 1 : 0
+  }, undefined, {
+    path: '.'
+  })
+  .on('error', function (err) {
+    if (args.verbose) {
+      console.error(err.stack)
+    } else {
+      console.error(err.toString())
+    }
+    process.exit(1)
+  })
+
+  function noInputFile () {
+    if (outfile) {
+      outStream = fs.createWriteStream(outfile)
+    } else {
+      outStream = process.stdout
+    }
+
+    changelogStream
+      .pipe(outStream)
+  }
+
+  const readStream = fs.createReadStream(infile)
+    .on('error', function () {
+      if (args.verbose) {
+        console.warn('infile does not exist.')
+      }
+
+      if (sameFile) {
+        noInputFile()
+      }
+    })
+
+  const tmp = tempfile()
+
+  return new Promise(r => {
+    changelogStream
+    .pipe(addStream(readStream))
+    .pipe(fs.createWriteStream(tmp))
+    .on('finish', function () {
+      fs.createReadStream(tmp)
+        .pipe(fs.createWriteStream(outfile))
+        .on('finish', () => {
+          r()
+        })
+    })
+  })
 }
 
 main();
