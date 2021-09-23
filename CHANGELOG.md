@@ -1,3 +1,12 @@
+## [0.2.5](https://github.com/zcong1993/js-release/compare/v0.2.4...v0.2.5) (2021-09-23)
+
+
+### Bug Fixes
+
+* changelog ([1fc86e9](https://github.com/zcong1993/js-release/commit/1fc86e9abd0b5ac3ad24fe0a83a2aa2dd5e0fc6f))
+
+
+
 ## [0.2.4](https://github.com/zcong1993/js-release/compare/v0.2.3...v0.2.4) (2021-09-23)
 
 

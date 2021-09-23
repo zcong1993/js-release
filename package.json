@@ -1,6 +1,6 @@
 {
   "name": "@zcong/js-release",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "my cool project",
   "bin": "./index.js",
   "repository": {
