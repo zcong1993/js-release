@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo no test!",
-    "release": "node ./index.js",
+    "release": "node ./index.js --skipBuild",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path ."
   },
   "author": "zcong1993 <zhangcong1992@gmail.com>",
