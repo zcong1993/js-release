@@ -1,3 +1,7 @@
+## [0.2.3](https://github.com/zcong1993/js-release/compare/v0.2.0...v0.2.3) (2021-09-23)
+
+
+
 # [0.2.0](https://github.com/zcong1993/js-release/compare/v0.1.0...v0.2.0) (2021-09-23)
 
 
