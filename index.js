@@ -293,7 +293,6 @@ async function changelog() {
       fs.createReadStream(tmp)
         .pipe(fs.createWriteStream(outfile))
         .on('finish', () => {
-          console.log(111)
           r()
         })
     })
