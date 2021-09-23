@@ -244,7 +244,6 @@ async function ghRelease(tag, prerelease) {
 async function changelog() {
   const infile = 'CHANGELOG.md'
   const outfile = infile
-  const sameFile = true
 
   const changelogStream = conventionalChangelog({
     preset: 'angular',
@@ -261,27 +260,11 @@ async function changelog() {
     process.exit(1)
   })
 
-  function noInputFile () {
-    if (outfile) {
-      outStream = fs.createWriteStream(outfile)
-    } else {
-      outStream = process.stdout
-    }
-
-    changelogStream
-      .pipe(outStream)
+  if (!fs.existsSync(infile)) {
+    fs.writeFileSync(infile, '')
   }
 
   const readStream = fs.createReadStream(infile)
-    .on('error', function () {
-      if (args.verbose) {
-        console.warn('infile does not exist.')
-      }
-
-      if (sameFile) {
-        noInputFile()
-      }
-    })
 
   const tmp = tempfile()
 
